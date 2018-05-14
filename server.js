@@ -97,22 +97,27 @@ app.get("/projects", (req,res) =>{
 
 //page that displays a list of all the projects ive created
 app.get("/projects/weatherApp", async (request,response) =>{
-    var address = `350 5th Ave, New York, NY 10118`
-    const weatherData = await weather.getAddressWeatherData(address);
-    response.render('weatherApp.hbs',{
-        pageTitle: 'The Weather App',
-        welcomeMessage: 'Example of an application that displays weather information.',
-        address: weatherData.address,
-        lat: weatherData.lat,
-        lng: weatherData.lng,
-        temperature: weatherData.temperature,
-        apparentTemperature: weatherData.apparentTemperature,
-        temperatureBlurb: weatherData.temperatureBlurb,
-        highTemp: weatherData.maxTemp,
-        lowTemp: weatherData.minTemp,
-        shortSummary: weatherData.shortSummary,
-        dailySummary: weatherData.dailySummary 
-    });
+    try{
+        var address = `350 5th Ave, New York, NY 10118`
+        const weatherData = await weather.getAddressWeatherData('111111124324234');
+        response.render('weatherApp.hbs',{
+            pageTitle: 'The Weather App',
+            welcomeMessage: 'Example of an application that displays weather information.',
+            address: weatherData.address,
+            lat: weatherData.lat,
+            lng: weatherData.lng,
+            temperature: weatherData.temperature,
+            apparentTemperature: weatherData.apparentTemperature,
+            temperatureBlurb: weatherData.temperatureBlurb,
+            highTemp: weatherData.maxTemp,
+            lowTemp: weatherData.minTemp,
+            shortSummary: weatherData.shortSummary,
+            dailySummary: weatherData.dailySummary 
+        });
+    } catch(e){
+        response.send(`something went wrong! ${e}`);
+    }
+   
 });
 
 
