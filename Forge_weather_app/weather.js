@@ -44,7 +44,7 @@ var getAddressWeatherData = (address) =>{
         }).then((response)=>{
             addressWeatherData.temperature = response.data.currently.temperature;
             addressWeatherData.apparentTemperature = response.data.currently.apparentTemperature;
-            addressWeatherData.temperatureBlurb =  `It is currently ${addressWeatherData.temperature} degrees. But it feels like ${addressWeatherData.actualTemperature} degrees.`;
+            addressWeatherData.temperatureBlurb =  `It is currently ${addressWeatherData.temperature} degrees. But it feels like ${addressWeatherData.apparentTemperature} degrees.`;
             addressWeatherData.maxTemp = response.data.daily.data[0].temperatureMax;
             addressWeatherData.minTemp = response.data.daily.data[0].temperatureMin;
             addressWeatherData.shortSummary = response.data.currently.summary;
