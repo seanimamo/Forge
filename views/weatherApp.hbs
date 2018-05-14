@@ -5,9 +5,17 @@
         <title>The Forge</title>
     </head>
     <body>
-        {{> header}}
-        <p>{{welcomeMessage}}</p>
-        <p>Currently, at the address of: "{{address}}", DarkSky Weather data indicates: {{temperatureData}}</p>
-       {{> footer}}
+
+            {{> header}}
+            <p>{{welcomeMessage}}</p>
+            <h1>Currently at: {{address}} </h1>
+            <h2>{{dailySummary}}</h2>
+            <p><b>Feels Like: </b>{{apparentTemperature}}&#8457<b>  High:</b>{{highTemp}}&#8457 <b>  Low: </b>{{lowTemp}}&#8457</p>
+            <p>Google Maps Geocode API indicates that for this location, the latitude is: {{lat}} and the longitude is {{lng}}</p>
+
+            <p>DarkSky weather data indicates: {{temperatureBlurb}}</p>
+            {{> footer}}
+
+       
     </body>
 </html>

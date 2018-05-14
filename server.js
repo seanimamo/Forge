@@ -100,21 +100,30 @@ app.get("/projects/weatherApp", (request,response) =>{
     var address = `350 5th Ave, New York, NY 10118`
     var asyncRender = (response) => { 
         return new Promise((resolve,reject) => {
-            weather.getAddressWeatherData(address).then((res) => {
-                resolve(res.temperatureBlurb);
+            weather.getAddressWeatherData(address).then((weatherData) => {
+                resolve(weatherData);
             }, (errorMessage) =>{
                 reject(errorMessage);
             });
         });
     };
+
     //notice that I have to even wrap my res.render into a promise function because I have to wait for the weather api call to finish BEFORE I render the page
     asyncRender(response).then((result) => {
-       // console.log('result: ', result);
+        console.log('result: ', result);
         response.render('weatherApp.hbs',{
             pageTitle: 'The Weather App',
             welcomeMessage: 'Example of an application that displays weather information.',
-            address: address,
-            temperatureData: result,
+            address: result.address,
+            lat: result.lat,
+            lng: result.lng,
+            temperature: result.temperature,
+            apparentTemperature: result.apparentTemperature,
+            temperatureBlurb: result.temperatureBlurb,
+            highTemp: result.maxTemp,
+            lowTemp: result.minTemp,
+            shortSummary: result.shortSummary,
+            dailySummary: result.dailySummary 
         });
     }, (errorMessage) =>{
         console.log(errorMessage);
