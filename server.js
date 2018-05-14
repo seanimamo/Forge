@@ -99,7 +99,7 @@ app.get("/projects", (req,res) =>{
 app.get("/projects/weatherApp", async (request,response) =>{
     try{
         var address = `350 5th Ave, New York, NY 10118`
-        const weatherData = await weather.getAddressWeatherData('111111124324234');
+        const weatherData = await weather.getAddressWeatherData(address);
         response.render('weatherApp.hbs',{
             pageTitle: 'The Weather App',
             welcomeMessage: 'Example of an application that displays weather information.',
