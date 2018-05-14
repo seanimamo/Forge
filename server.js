@@ -22,6 +22,7 @@ hbs.registerHelper('capitalizeString', (text) =>{
 });
 
 
+const weather = require('./Forge_weather_app/weather.js');
 
 
 // example of us creating our own custom middleware, note that app.use()
@@ -32,7 +33,7 @@ hbs.registerHelper('capitalizeString', (text) =>{
 app.use((req,res,next)=>{
     var currentDate = new Date().toString();
     var log = `${currentDate}: ${req.method} ${req.url}`;
-    console.log(log);
+    console.log(`Server access log file: ${log}`);
     fs.appendFile('Server.log', log + '\n', (err) =>{
         if(err){console.log("Unable to append to server.log");}
     });
@@ -60,19 +61,6 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req,res) =>{
-    //example of just sending some simple html as the response to this route
-    //res.send('<h1>The Forge company providing next generation web applications and websites. </h1>');
-    
-    //an example showing we can return JSON.
-    // res.send({
-    //   name:'Sean',
-    //   likes : [
-    //       'coding',
-    //       'sweg',
-    //       'food'
-    //   ]
-    // })
-
 
     res.render('home.hbs',{
         pageTitle: 'Home Page',
@@ -108,17 +96,38 @@ app.get("/projects", (req,res) =>{
 });
 
 //page that displays a list of all the projects ive created
-app.get("/projects/weatherApp", (req,res) =>{
-    res.render('weatherApp.hbs',{
-        pageTitle: 'The Weather App',
-        welcomeMessage: 'Example of an application that displays weather for a given address'
+app.get("/projects/weatherApp", (request,response) =>{
+    var address = `350 5th Ave, New York, NY 10118`
+    var asyncRender = (response) => { 
+        return new Promise((resolve,reject) => {
+            weather.getAddressWeatherData(address).then((res) => {
+                resolve(res.temperatureBlurb);
+            }, (errorMessage) =>{
+                reject(errorMessage);
+            });
+        });
+    };
+    //notice that I have to even wrap my res.render into a promise function because I have to wait for the weather api call to finish BEFORE I render the page
+    asyncRender(response).then((result) => {
+       // console.log('result: ', result);
+        response.render('weatherApp.hbs',{
+            pageTitle: 'The Weather App',
+            welcomeMessage: 'Example of an application that displays weather information.',
+            address: address,
+            temperatureData: result,
+        });
+    }, (errorMessage) =>{
+        console.log(errorMessage);
     });
+     
 });
+
+
+
 
 // this binds the application to a port on our machine. Note that we use our port variable for this instead
 // because it makes it dynamic in the case that we deploy our application to a service like heroku.
 // this also takes another optional arguement in the form of a function where we can do whatever we want.
-
 app.listen(port, () =>{
     console.log(`Server is up and running on port ${port}`);
 });
