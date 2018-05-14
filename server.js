@@ -22,6 +22,8 @@ hbs.registerHelper('capitalizeString', (text) =>{
 });
 
 
+
+
 // example of us creating our own custom middleware, note that app.use()
 // only takes one arguement which is a function. the 'next' variable included
 // in our arrow function arguement is important because it tells express when we are done using our middleware 
@@ -102,6 +104,14 @@ app.get("/projects", (req,res) =>{
     res.render('projects.hbs',{
         pageTitle: 'Projects page',
         welcomeMessage: 'Here are a list of my projects'
+    });
+});
+
+//page that displays a list of all the projects ive created
+app.get("/projects/weatherApp", (req,res) =>{
+    res.render('weatherApp.hbs',{
+        pageTitle: 'The Weather App',
+        welcomeMessage: 'Example of an application that displays weather for a given address'
     });
 });
 
